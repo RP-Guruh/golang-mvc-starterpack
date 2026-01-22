@@ -10,6 +10,7 @@ type PeopleRepository interface {
 	Index() ([]models.People, error)
 	Show(id string) (models.People, error)
 	Update(p models.People) error
+	Delete(id string) error
 }
 
 type peopleRepository struct {
@@ -27,6 +28,7 @@ func (r *peopleRepository) Index() ([]models.People, error) {
 
 	result, err := r.db.Query(query)
 	if err != nil {
+
 		return nil, err
 	}
 	defer result.Close()
@@ -120,5 +122,16 @@ func (r *peopleRepository) Update(p models.People) error {
 		return sql.ErrNoRows
 	}
 
+	return nil
+}
+
+func (r *peopleRepository) Delete(id string) error {
+	query := `
+        DELETE FROM people WHERE id = ?
+    `
+	_, err := r.db.Exec(query, id)
+	if err != nil {
+		return err
+	}
 	return nil
 }

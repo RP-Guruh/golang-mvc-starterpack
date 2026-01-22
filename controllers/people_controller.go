@@ -78,3 +78,12 @@ func (h *PeopleHandler) UpdatePeople(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "data berhasil diupdate"})
 }
+
+func (h *PeopleHandler) DeletePeople(c *gin.Context) {
+	idParam := c.Param("id")
+	if err := h.service.Delete(idParam); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "data berhasil dihapus"})
+}

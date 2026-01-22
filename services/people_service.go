@@ -14,6 +14,7 @@ type PeopleService interface {
 	Index() ([]models.People, error)
 	Show(id string) (models.People, error)
 	Update(id uint, patch dto.PeoplePatch) error
+	Delete(id string) error
 }
 
 type peopleService struct {
@@ -88,4 +89,12 @@ func (s *peopleService) Update(id uint, patch dto.PeoplePatch) error {
 	existing.UpdatedAt = time.Now()
 
 	return s.repo.Update(existing)
+}
+
+func (s *peopleService) Delete(id string) error {
+	_, err := s.repo.Show(id)
+	if err != nil {
+		return err
+	}
+	return s.repo.Delete(id)
 }
